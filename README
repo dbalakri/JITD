@@ -1,0 +1,106 @@
+#### COMPILATION ###
+
+Use one of the following scripts:
+
+	/>	make read
+
+OR
+
+	/>	make noread
+
+OR
+
+	/>	make
+
+these will produce one ore both of "jitd_read" and "jitd_noread" executables.
+
+### TEST SCRIPT SYNTAX ###
+
+1st line must start with the keyword "policy" followed by policies to be included in the jitd in-order:
+	"crack <N>" will add cracking policy with "N" (integer) as the threshold for cracking
+	"sort" will add sorting policy
+	"splay" will add splaying policy
+
+script can now contain any number and order of queries
+	1) "insert P Q R S" executes insert queries and requires the following 4 paramenters:
+		P: Number of insert queries (integer)
+		Q: Minimum value of data for all queries (integer)
+		R: Maximum value of data for all queries (integer)
+		S: Number of elements to be inserted in each query (integer)
+	2) "scan A B C D X Y" executes scan queries and requires the following 6 paramenters:
+		A: Number of scan queries (integer)
+		B: Minimum value of data for all queries (integer)
+		C: Maximum value of data for all queries (integer)
+		D*: Maximum range of values to be scanned in each query (integer) 
+		X: Fraction of the data with higher probability for scan queries (double)
+		Y: Probability of scanning "X" in the queries (double)
+
+Example:
+
+	policy crack 3 sort splay
+	insert 1 0 9 1000
+	scan 10 0 9 3 0.2 0.8
+	end
+
+Here,
+we create a JITD that uses all 3 policies with 3 as the maximum size before an array is cracked.
+Inserts 1000 elements in the range [0,9] once.
+Runs 10 scan queries such that 0.2 ( or 20% ) of the possible values of the data is scanned 0.8 ( or 80% ) of the times, with each query in the range [0,9] with a maximum of 3 elements to be scanned in each query*.
+
+* Currently scans for only one element. Scan queries with more than 1 element is implemented but not utilized for testing purposes yet.
+
+### Run Tests ###
+
+create files with the required queries using the test script syntax explained above. Let the file name be "test".
+
+If "test" uses splay policy then execute:
+
+	/>	./jitd_read test
+
+ELSE
+
+If "test" does not use splay policy then execute:
+
+	/>	./jitd_noread test
+
+Note: 
+Running a test that uses splay policy with jitd_noread will ignore splay and use Cogs WITHOUT readcounts.
+Running a test that does not use splay policy will use Cogs WITH readcounts but will not be updated or utilized.
+
+### OUTPUT ###
+
+Output is a list of time taken to execute each query in order of occurance in the test script in nanoseconds. 
+
+For example the output for the above example would be like:
+
+	RUNTIMES:
+	114954,586430,83242,35468,38722,136465,78834,86136,34138,35039,38226
+
+where,
+114954 nanoseconds is the time taken to execute the 1st insert query
+the next 10 numbers are time taken to execute the 10 scan queries in nanoseconds
+
+### MISC ###
+
+SEED used to generate random data for inserts is 80 by default for the first insert query and is increased by 1 every time for each next insert queries.
+SEED used to generate random scans is 44 by default for the first set of scan queries and is increased by 1 every time for each next set of scan queries.
+
+
+Unused in current version, but when a JITD is printed, it follows the following format:
+
+Output tree description for "read":
+
+								<\t>							<Left Child Cog>
+
+		 (<read count of cog>)<type of cog>:<key or size> {
+		 						
+		 						<\t>							<Right Child Cog>
+
+
+Output tree description for "noread":
+
+				<\t>				<Left Child Cog>
+
+		<type of cog>:<key or size> {
+
+		 		<\t>				<Right Child Cog>
