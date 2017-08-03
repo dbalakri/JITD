@@ -13,10 +13,10 @@ template <class T>
 void sortPolicy<T>::beforeIterator (cog* &node){
 	switch(node->getType()){
 		case ARRAY:{
-					sort(((arrayNode<T>*)node)->data.begin(), ((arrayNode<T>*)node)->data.end());
-					vector<T> v = ((arrayNode<T>*)node)->data;
+					vector<T>* v = ((arrayNode<T>*)node)->data;
 					delete node;
-					node = new sortedarrayNode<T>(v);
+					sort(v->begin(), v->end());
+					node = new sortedarrayNode<T>(*v);
 				}
 	}
 }

@@ -7,16 +7,14 @@ using namespace std;
 
 vector<tuple<int,int> > queryGenerator(int seed, int num, int min, int max, int rangeSize, double pData, double pQuery){
     vector<tuple<int,int> > queries;
-    
-    randUniform hhStart(seed, min, (int)(min+(1-pData)*(max-min+1))-1);
+    int n = max - min + 1; // total size of range
+    int m = (int)(pData * n); // size of range for heavyhitter
+    int r = n - m; // size of remaining range
+    randUniform hhStart(seed, min, min + r + 1);
     int dataMin = hhStart.getRand();
-    int dataMax = (int)(dataMin+(pData)*(max-min+1))-1;
-    pQuery = pQuery - (1 - pQuery); // excess probability
-    
-    // randUniform lpMin(seed, min, max-rangeSize);
-    randUniform lpMin(seed, min, max);
+    int dataMax = dataMin + m - 1;
+    randUniform lpMin(seed, min, max - m);
     randUniform hpMin(seed, dataMin, dataMax);
-    //randUniform range(seed, 0, rangeSize);
     
     default_random_engine generator(seed);
     uniform_real_distribution<double> distribution(0.0,1.0);
@@ -28,11 +26,10 @@ vector<tuple<int,int> > queryGenerator(int seed, int num, int min, int max, int 
             qMin = hpMin.getRand();
         }else{
             qMin = lpMin.getRand();
+            if(qMin >= dataMin){
+                qMin += m;
+            }
         }
-        // qMax = qMin + range.getRand();
-        // if(qMax > max){
-        //     qMax = max;
-        // }
         qMax = qMin;
         tuple<int,int> query(qMin,qMax);
         queries.push_back(query);

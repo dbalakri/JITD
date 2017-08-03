@@ -12,10 +12,9 @@ void printTree(cog* it,int depth){
 				for (int i = 0; i < depth; ++i){
 					cout << "\t";
 				}
-				vector<data> arrdata = ((arrayNode<data>*)it)->data;
-				cout << "ARRAY:" << ((arrayNode<data>*)it)->getSize() << "{" << arrdata[0].key;
-				for (int i = 1; i < arrdata.size(); ++i){
-					cout << "," << arrdata[i].key;
+				cout << "ARRAY:" << ((arrayNode<data>*)it)->getSize() << "{" << ((arrayNode<data>*)it)->data->at(0).key;
+				for (int i = 1; i < ((arrayNode<data>*)it)->getSize() ; ++i){
+					cout << "," << ((arrayNode<data>*)it)->data->at(i).key;
 				}
 				cout << "}" << endl;
 				return;
@@ -24,10 +23,9 @@ void printTree(cog* it,int depth){
 				for (int i = 0; i < depth; ++i){
 					cout << "\t";
 				}
-				vector<data> arrdata = ((sortedarrayNode<data>*)it)->data;
-				cout << "SORTED_ARRAY:" << ((sortedarrayNode<data>*)it)->getSize() << "{" << arrdata[0].key;
-				for (int i = 1; i < arrdata.size(); ++i){
-					cout << "," << arrdata[i].key;
+				cout << "SORTED_ARRAY:" << ((sortedarrayNode<data>*)it)->getSize() << "{" << ((sortedarrayNode<data>*)it)->data->at(0).key;
+				for (int i = 1; i < ((sortedarrayNode<data>*)it)->getSize(); ++i){
+					cout << "," << ((sortedarrayNode<data>*)it)->data->at(i).key;
 				}
 				cout << "}" << endl;
 				return;

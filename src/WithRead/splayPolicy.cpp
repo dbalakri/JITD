@@ -28,22 +28,28 @@ void splayPolicy<T>::beforeIterator (cog* &node){
 						cog* a = lhs->getLeft();
 						cog* b = lhs->getRight();
 						cog* c = ((btreeNode<T>*)node)->getRight();
-						cog* newR = new btreeNode<T>(((btreeNode<T>*)node)->getKey(),b,c);
-						newR->setReadcount(b->getReadcount()+c->getReadcount());
-						delete node;
-						node = new btreeNode<T>(lhs->getKey(), a, newR);
-						node->setReadcount(newR->getReadcount()+a->getReadcount());
+						if (a->getReadcount()>2*c->getReadcount()){
+							cog* newR = new btreeNode<T>(((btreeNode<T>*)node)->getKey(),b,c);
+							newR->setReadcount(b->getReadcount()+c->getReadcount());
+							delete node;
+							node = new btreeNode<T>(lhs->getKey(), a, newR);
+							node->setReadcount(newR->getReadcount()+a->getReadcount());
+						}
+						
 					}
 					else if(((btreeNode<T>*)node)->getRight()->getReadcount() >= (2/3)*node->getReadcount() && ((btreeNode<T>*)node)->getRight()->getType() == BTREE){
 						btreeNode<T>* rhs = ((btreeNode<T>*)((btreeNode<T>*)node)->getRight());
 						cog* a = ((btreeNode<T>*)node)->getLeft();
 						cog* b = rhs->getLeft();
 						cog* c = rhs->getRight();
-						cog* newL = new btreeNode<T>(((btreeNode<T>*)node)->getKey(),a,b);
-						newL->setReadcount(a->getReadcount()+b->getReadcount());
-						delete node;
-						node = new btreeNode<T>(rhs->getKey(), newL, c);
-						node->setReadcount(newL->getReadcount()+c->getReadcount());
+						if (c->getReadcount()>2*a->getReadcount()){
+							
+							cog* newL = new btreeNode<T>(((btreeNode<T>*)node)->getKey(),a,b);
+							newL->setReadcount(a->getReadcount()+b->getReadcount());
+							delete node;
+							node = new btreeNode<T>(rhs->getKey(), newL, c);
+							node->setReadcount(newL->getReadcount()+c->getReadcount());
+						}
 					}
 					return;
 				}

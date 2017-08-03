@@ -12,18 +12,19 @@ using namespace std;
 template <class T>
 sortedarrayNode<T>::sortedarrayNode( T* &d, int s)
 : cog(SORTED_ARRAY){
+	data = new vector<T>(s);
 	for(int i = 0; i < s; i++){
-		data.push_back(d[i]);
+		data->push_back(d[i]);
 	}
 }
 
 template <class T>
 sortedarrayNode<T>::sortedarrayNode(vector<T> &d)
-: cog(SORTED_ARRAY), data(d){}
+: cog(SORTED_ARRAY), data(&d){}
 
 template <class T>
 int sortedarrayNode<T>::getSize(){
-	return data.size();
+	return data->size();
 }
 
 #endif // SORTEDARRAYNODE_CPP_

@@ -39,15 +39,14 @@ void tester::scan(int queryCount, int dataMin, int dataMax, int rangeSize, doubl
 		using clock = std::chrono::steady_clock;
 		data low(get<0>(queries[i]),get<0>(queries[i]));
 		data high(get<1>(queries[i]),get<1>(queries[i]));
-		vector<data> result;
+		vector<data>* result = new vector<data>();
 		clock::time_point start = clock::now();
-		myJitd->scan(low,high,result);
+		myJitd->scan(low,high,*result);
 		clock::time_point end = clock::now();
 		clock::duration execution_time = end - start;
-		total_time +=  chrono::duration_cast<chrono::nanoseconds>(execution_time).count();
-		//runtimes.push_back(chrono::duration_cast<chrono::nanoseconds>(execution_time).count());
-		// cout << "SCAN----------" << endl;
-		// printJitd();
+		runtimes.push_back(chrono::duration_cast<chrono::nanoseconds>(execution_time).count());
+		cout << "SCAN----------" << endl;
+		printJitd();
 	}
 	s_seed++;
 }

@@ -1,4 +1,4 @@
-CC := g++ -w -std=c++11 
+CC := g++ -g -w -std=c++11 
 ROOT := ../../
 INC := $(ROOT)include/
 SRC := $(ROOT)src/
