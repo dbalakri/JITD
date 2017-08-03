@@ -9,7 +9,7 @@ using namespace std;
 template <class T>
 class arrayNode: public cog {
 	public:
-		vector<T> data;
+		vector<T>* data;
 		arrayNode( T* &d, int s);
 		arrayNode(vector<T> &d);
 		int getSize();

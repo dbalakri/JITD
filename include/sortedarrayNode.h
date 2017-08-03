@@ -9,7 +9,7 @@ using namespace std;
 template <class T>
 class sortedarrayNode: public cog {
 	public:
-		vector<T> data;
+		vector<T>* data;
 		sortedarrayNode( T* &d, int s);
 		sortedarrayNode( vector<T> &d);
 		int getSize();

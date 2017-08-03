@@ -8,6 +8,7 @@ class data {
 		int key;
 		int value;
 		data(int k, int v);
+		data();
 		bool operator<(const data& other) const;
 		bool operator>(const data& other) const;
 		bool operator<=(const data& other) const;
